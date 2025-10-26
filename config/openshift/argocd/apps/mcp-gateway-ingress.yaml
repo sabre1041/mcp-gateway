@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mcp-gateway-ingress
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  destination:
+    namespace: gateway-system
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm: {}
+    path: config/openshift/charts/mcp-gateway-ingress
+    repoURL: 'https://github.com/sabre1041/mcp-gateway/'
+    targetRevision: openshift-deployment
+  syncPolicy:
+    automated:
+      enabled: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
